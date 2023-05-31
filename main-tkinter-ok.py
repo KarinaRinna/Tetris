@@ -1,6 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
 
+import pygame
+
+from main import sc, score, record
+
 W, H = 10, 20
 TILE = 45
 GAME_RES = W * TILE, H * TILE
@@ -27,6 +31,14 @@ canvas.create_image(0, 0, anchor=NW, image=img_obj1)
 
 img_obj2 = PhotoImage(file="img/bg2.png")
 canvas.create_image(20, 20, anchor=NW, image=img_obj2)
+
+grid = [canvas.create_rectangle(x * TILE, y * TILE, x * TILE+TILE, y * TILE+TILE) for x in range(W) for y in range(H)]
+for item in grid:
+    canvas.move(item, 20, 20)
+
+
+
+canvas.create_text(505, 30,text="TETRIS", font=("Wi Guru 2", 65),fill="red")
 
 #canvas.create_rectangle(420,120,480,480, fill="darkgreen", outline="")
 #canvas.create_text(200,500,text="Hello World!", font=("Arial", 40),fill="white")
