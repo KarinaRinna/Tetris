@@ -1,9 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-
-import pygame
-
-from main import sc, score, record
+from random import choice, randrange
 
 W, H = 10, 20
 TILE = 45
@@ -36,18 +33,6 @@ grid = [canvas.create_rectangle(x * TILE, y * TILE, x * TILE+TILE, y * TILE+TILE
 for item in grid:
     canvas.move(item, 20, 20)
 
-main_font = pygame.font.Font('font/font.ttf', 65)
-font = pygame.font.Font('font/font.ttf', 45)
-
-title_tetris = main_font.render('TETRIS', True, pygame.Color('red'))
-title_score = font.render('score:', True, pygame.Color('white'))
-title_record = font.render('record:', True, pygame.Color('white'))
-
-sc.blit(title_score, (535, 780))
-sc.blit(font.render(str(score), True, pygame.Color('white')), (550, 840))
-sc.blit(title_record, (525, 650))
-sc.blit(font.render(record, True, pygame.Color('gold')), (550, 710))
-
 score = "0"
 record = "0"
 
@@ -57,8 +42,17 @@ canvas.create_text(550, 840,text=str(score), font=("Wi Guru 2", 40),fill="white"
 canvas.create_text(525, 650,text="record:", font=("Wi Guru 2", 40),fill="white", anchor=NW)
 canvas.create_text(550, 710,text=record, font=("Wi Guru 2", 40),fill="gold", anchor=NW)
 
-#canvas.create_rectangle(420,120,480,480, fill="darkgreen", outline="")
-#canvas.create_text(200,500,text="Hello World!", font=("Arial", 40),fill="white")
+get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
 
+
+def rgb_to_hex(rgb):
+    return '#%02x%02x%02x' % rgb
+
+
+for item in grid:
+    canvas.itemconfigure(item, fill=rgb_to_hex(get_color()))
+
+for item in grid:
+    canvas.itemconfigure(item, fill="")
 
 tk.mainloop()
