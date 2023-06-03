@@ -52,13 +52,6 @@ def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % rgb
 
 
-for item in grid:
-    sc.itemconfigure(item, fill=rgb_to_hex(get_color()))
-
-for item in grid:
-    sc.itemconfigure(item, fill="")
-
-
 figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
                [(0, -1), (-1, -1), (-1, 0), (0, 0)],
                [(-1, 0), (-1, 1), (0, 0), (0, -1)],
@@ -80,6 +73,20 @@ for i in range(4):
     figure_rect_x = figure[i][0] * TILE
     figure_rect_y = figure[i][1] * TILE
     game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color))
+
+# draw next figure
+for i in range(4):
+    figure_rect_x = next_figure[i][0] * TILE + 380
+    figure_rect_y = next_figure[i][1] * TILE + 185
+    game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
+                             fill=rgb_to_hex(next_color))
+
+
+for item in grid:
+    game_sc.itemconfigure(item, fill=rgb_to_hex(get_color()))
+
+for item in grid:
+    game_sc.itemconfigure(item, fill="")
 
 
 tk.mainloop()
