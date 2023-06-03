@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from random import choice, randrange
+from copy import deepcopy
 
 
 W, H = 10, 20
@@ -23,6 +24,19 @@ tk.wm_attributes("-topmost", 1)
 
 sc = Canvas(tk, width=RES[0], height=RES[1], bg="red", highlightthickness=0)
 sc.pack()
+
+def get_record():
+    try:
+        with open('record') as f:
+            return f.readline()
+    except FileNotFoundError:
+        with open('record', 'w') as f:
+            f.write('0')
+
+def set_record(record, score):
+    rec = max(int(record), score)
+    with open('record', 'w') as f:
+        f.write(str(rec))
 
 game_sc = Canvas(tk, width=W*TILE+1, height=H*TILE+1, bg="blue", highlightthickness=0)
 game_sc.place(x=20, y=20, anchor=NW)
@@ -49,8 +63,9 @@ field = [[0 for i in range(W)] for j in range(H)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
-score = "0"
-record = "0"
+score, lines = 0, 0
+scores = {0: 0, 1: 100, 2: 300, 3: 700, 4: 1500}
+record = get_record()
 
 sc.create_text(505, 30,text="TETRIS", font=("Wi Guru 2", 45),fill="red", anchor=NW)
 sc.create_text(535, 780,text="score:", font=("Wi Guru 2", 40),fill="white", anchor=NW)
@@ -60,34 +75,42 @@ sc.create_text(550, 710,text=record, font=("Wi Guru 2", 40),fill="gold", anchor=
 
 get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
 
+figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
+color, next_color = get_color(), get_color()
+
 
 def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % rgb
 
 
-from copy import deepcopy
-figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
-color, next_color = get_color(), get_color()
+# # draw figure
+# for i in range(4):
+#     figure_rect_x = figure[i][0] * TILE
+#     figure_rect_y = figure[i][1] * TILE
+#     game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color))
+#
+# # draw next figure
+# for i in range(4):
+#     figure_rect_x = next_figure[i][0] * TILE + 380
+#     figure_rect_y = next_figure[i][1] * TILE + 185
+#     game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
+#                              fill=rgb_to_hex(next_color))
+#
+# for item in grid:
+#     game_sc.itemconfigure(item, fill=rgb_to_hex(get_color()))
+#
+# for item in grid:
+#     game_sc.itemconfigure(item, fill="")
 
-# draw figure
-for i in range(4):
-    figure_rect_x = figure[i][0] * TILE
-    figure_rect_y = figure[i][1] * TILE
-    game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color))
-
-# draw next figure
-for i in range(4):
-    figure_rect_x = next_figure[i][0] * TILE + 380
-    figure_rect_y = next_figure[i][1] * TILE + 185
-    game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
-                             fill=rgb_to_hex(next_color))
+def check_borders():
+    if figure[i][0] < 0 or figure[i][0] > W - 1:
+        return False
+    elif figure[i][1] > H - 1 or field[figure[i][1]][figure[i][0]]:
+        return False
+    return True
 
 
-for item in grid:
-    game_sc.itemconfigure(item, fill=rgb_to_hex(get_color()))
 
-for item in grid:
-    game_sc.itemconfigure(item, fill="")
 
 
 tk.mainloop()
