@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from random import choice, randrange
 from copy import deepcopy
+import time
 
 
 W, H = 10, 20
@@ -11,11 +12,14 @@ RES = 750, 940
 FPS = 60
 
 def on_closing():
+    global app_running
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
+        app_running = False
         tk.destroy()
 
 
 tk = Tk()
+app_running = True
 tk.protocol("WM_DELETE_WINDOW", on_closing)
 tk.title("Tetris")
 tk.resizable(0, 0)
@@ -32,6 +36,7 @@ def get_record():
     except FileNotFoundError:
         with open('record', 'w') as f:
             f.write('0')
+        return "0"
 
 def set_record(record, score):
     rec = max(int(record), score)
@@ -110,5 +115,28 @@ def check_borders():
     return True
 
 
+def move_fish(event):
+    global rotate, anim_limit, dx
+    if event.keysym == 'Up':
+        rotate = True
+    elif event.keysym == 'Down':
+        anim_limit = 100
+    elif event.keysym == 'Left':
+        dx = -1
+    elif event.keysym == 'Right':
+        dx = 1
 
-tk.mainloop()
+
+game_sc.bind_all("<KeyPress-Up>", move_obj)
+game_sc.bind_all("<KeyPress-Down>", move_obj)
+game_sc.bind_all("<KeyPress-Left>", move_obj)
+game_sc.bind_all("<KeyPress-Right>", move_obj)
+
+
+while app_running:
+    if app_running:
+        tk.update_idletasks()
+        tk.update()
+    time.sleep(0.005)
+
+#tk.mainloop()
