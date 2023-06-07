@@ -111,6 +111,4 @@ def check_borders():
 
 
 
-
-
 tk.mainloop()
