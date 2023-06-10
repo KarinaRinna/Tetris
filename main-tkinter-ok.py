@@ -139,5 +139,4 @@ while app_running:
         tk.update()
     time.sleep(0.005)
 
-
 #tk.mainloop()
