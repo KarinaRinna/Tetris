@@ -15,7 +15,7 @@ def on_closing():
     global app_running
     if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
         app_running = False
-        tk.destroy()
+        #tk.destroy()
 
 
 tk = Tk()
@@ -132,11 +132,64 @@ game_sc.bind_all("<KeyPress-Down>", move_obj)
 game_sc.bind_all("<KeyPress-Left>", move_obj)
 game_sc.bind_all("<KeyPress-Right>", move_obj)
 
-
+dx, rotate = 0, False
 while app_running:
     if app_running:
+        # move x
+        figure_old = deepcopy(figure)
+        for i in range(4):
+            figure[i][0] += dx
+            if not check_borders():
+                figure = deepcopy(figure_old)
+                break
+        # move y
+        anim_count += anim_speed
+        if anim_count > anim_limit:
+            anim_count = 0
+            figure_old = deepcopy(figure)
+            for i in range(4):
+                figure[i][1] += 1
+                if not check_borders():
+                    for i in range(4):
+                        field[figure_old[i][1]][figure_old[i][0]] = color
+                    figure, color = next_figure, next_color
+                    next_figure, next_color = deepcopy(choice(figures)), get_color()
+                    anim_limit = 2000
+                    break
+        # rotate
+        center = figure[0]
+        figure_old = deepcopy(figure)
+        if rotate:
+            for i in range(4):
+                x = figure[i][1] - center[1]
+                y = figure[i][0] - center[0]
+                figure[i][0] = center[0] - x
+                figure[i][1] = center[1] + y
+                if not check_borders():
+                    figure = deepcopy(figure_old)
+                    break
+        # check lines
+        line, lines = H - 1, 0
+        for row in range(H - 1, -1, -1):
+            count = 0
+            for i in range(W):
+                if field[row][i]:
+                    count += 1
+                field[line][i] = field[row][i]
+            if count < W:
+                line -= 1
+            else:
+                anim_speed += 3
+                lines += 1
+        # compute score
+        score += scores[lines]
+
+
+        dx, rotate = 0, False
         tk.update_idletasks()
         tk.update()
     time.sleep(0.005)
 
+
+tk.destroy()
 #tk.mainloop()
