@@ -184,12 +184,22 @@ while app_running:
         # compute score
         score += scores[lines]
 
+        fig = []
+        # draw figure
+        for i in range(4):
+            figure_rect_x = figure[i][0] * TILE
+            figure_rect_y = figure[i][1] * TILE
+            fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color)))
+
 
         dx, rotate = 0, False
         tk.update_idletasks()
         tk.update()
+        for id_fig in fig: game_sc.delete(id_fig)
     time.sleep(0.005)
 
 
 tk.destroy()
 #tk.mainloop()
+
+video_time = 6:07
