@@ -192,6 +192,7 @@ while app_running:
             fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color)))
 
 
+
         dx, rotate = 0, False
         tk.update_idletasks()
         tk.update()
