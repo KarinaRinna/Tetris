@@ -4,12 +4,12 @@ from random import choice, randrange
 from copy import deepcopy
 import time
 
-
 W, H = 10, 20
 TILE = 45
 GAME_RES = W * TILE, H * TILE
 RES = 750, 940
 FPS = 60
+
 
 def on_closing():
     global app_running
@@ -29,6 +29,7 @@ tk.wm_attributes("-topmost", 1)
 sc = Canvas(tk, width=RES[0], height=RES[1], bg="red", highlightthickness=0)
 sc.pack()
 
+
 def get_record():
     try:
         with open('record') as f:
@@ -38,12 +39,14 @@ def get_record():
             f.write('0')
         return "0"
 
+
 def set_record(record, score):
     rec = max(int(record), score)
     with open('record', 'w') as f:
         f.write(str(rec))
 
-game_sc = Canvas(tk, width=W*TILE+1, height=H*TILE+1, bg="blue", highlightthickness=0)
+
+game_sc = Canvas(tk, width=W*TILE+1, height=H*TILE+1, bg="yellow", highlightthickness=0)
 game_sc.place(x=20, y=20, anchor=NW)
 
 img_obj1 = PhotoImage(file="img/bg.png")
@@ -70,19 +73,18 @@ anim_count, anim_speed, anim_limit = 0, 60, 2000
 
 score, lines = 0, 0
 scores = {0: 0, 1: 100, 2: 300, 3: 700, 4: 1500}
-record = get_record()
+record = "0"
 
-sc.create_text(505, 30,text="TETRIS", font=("Wi Guru 2", 45),fill="red", anchor=NW)
-sc.create_text(535, 780,text="score:", font=("Wi Guru 2", 40),fill="white", anchor=NW)
-sc.create_text(550, 840,text=str(score), font=("Wi Guru 2", 40),fill="white", anchor=NW)
-sc.create_text(525, 650,text="record:", font=("Wi Guru 2", 40),fill="white", anchor=NW)
-sc.create_text(550, 710,text=record, font=("Wi Guru 2", 40),fill="gold", anchor=NW)
+sc.create_text(505, 30,text="TETRIS", font=("WiGuru 2", 50),fill="red", anchor=NW)
+sc.create_text(535, 780,text="score:", font=("WiGuru 2", 35),fill="white", anchor=NW)
+_score = sc.create_text(550, 840,text=str(score), font=("WiGuru 2", 35),fill="white", anchor=NW)
+sc.create_text(525, 650,text="record:", font=("WiGuru 2", 35),fill="white", anchor=NW)
+_record = sc.create_text(550, 710,text=record, font=("WiGuru 2", 35),fill="gold", anchor=NW)
 
 get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
 
 figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
 color, next_color = get_color(), get_color()
-
 
 def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % rgb
@@ -92,20 +94,21 @@ def rgb_to_hex(rgb):
 # for i in range(4):
 #     figure_rect_x = figure[i][0] * TILE
 #     figure_rect_y = figure[i][1] * TILE
-#     game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color))
+#     game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE, fill=rgb_to_hex(color))
 #
 # # draw next figure
 # for i in range(4):
 #     figure_rect_x = next_figure[i][0] * TILE + 380
 #     figure_rect_y = next_figure[i][1] * TILE + 185
-#     game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
-#                              fill=rgb_to_hex(next_color))
+#     sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
+#                         fill=rgb_to_hex(next_color))
 #
 # for item in grid:
 #     game_sc.itemconfigure(item, fill=rgb_to_hex(get_color()))
 #
 # for item in grid:
 #     game_sc.itemconfigure(item, fill="")
+
 
 def check_borders():
     if figure[i][0] < 0 or figure[i][0] > W - 1:
@@ -115,7 +118,7 @@ def check_borders():
     return True
 
 
-def move_fish(event):
+def move_obj(event):
     global rotate, anim_limit, dx
     if event.keysym == 'Up':
         rotate = True
@@ -126,15 +129,15 @@ def move_fish(event):
     elif event.keysym == 'Right':
         dx = 1
 
-
-game_sc.bind_all("<KeyPress-Up>", move_obj)
-game_sc.bind_all("<KeyPress-Down>", move_obj)
-game_sc.bind_all("<KeyPress-Left>", move_obj)
-game_sc.bind_all("<KeyPress-Right>", move_obj)
+game_sc.bind_all("<KeyPress-Up>",move_obj)
+game_sc.bind_all("<KeyPress-Down>",move_obj)
+game_sc.bind_all("<KeyPress-Left>",move_obj)
+game_sc.bind_all("<KeyPress-Right>",move_obj)
 
 dx, rotate = 0, False
 while app_running:
     if app_running:
+        record = get_record()
         # move x
         figure_old = deepcopy(figure)
         for i in range(4):
@@ -189,9 +192,9 @@ while app_running:
         for i in range(4):
             figure_rect_x = figure[i][0] * TILE
             figure_rect_y = figure[i][1] * TILE
-            fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color)))
+            fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE, fill=rgb_to_hex(color)))
 
-         # draw field
+        # draw field
         for y, raw in enumerate(field):
             for x, col in enumerate(raw):
                 if col:
@@ -199,21 +202,42 @@ while app_running:
                     fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE,
                                                         figure_rect_y + TILE, fill=rgb_to_hex(col)))
 
+        fig2 = []
         # draw next figure
         for i in range(4):
             figure_rect_x = next_figure[i][0] * TILE + 380
             figure_rect_y = next_figure[i][1] * TILE + 185
-            game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
-                                     fill=rgb_to_hex(next_color))
+            fig2.append(sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
+                                fill=rgb_to_hex(next_color)))
+        # draw titles
+        sc.itemconfigure(_score, text=str(score))
+        sc.itemconfigure(_record, text=record)
+
+        # game over
+        for i in range(W):
+            if field[0][i]:
+                set_record(record, score)
+                field = [[0 for i in range(W)] for i in range(H)]
+                anim_count, anim_speed, anim_limit = 0, 60, 2000
+                score = 0
+                for item in grid:
+                    game_sc.itemconfigure(item, fill=rgb_to_hex(get_color()))
+                    time.sleep(0.005)
+                    tk.update_idletasks()
+                    tk.update()
+
+                for item in grid:
+                    game_sc.itemconfigure(item, fill="")
+
 
         dx, rotate = 0, False
         tk.update_idletasks()
         tk.update()
         for id_fig in fig: game_sc.delete(id_fig)
+        for id_fig in fig2: sc.delete(id_fig)
     time.sleep(0.005)
-
 
 tk.destroy()
 #tk.mainloop()
 
-# video_time = 6:07/.
+# video_time = 8:59
