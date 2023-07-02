@@ -46,7 +46,7 @@ def set_record(record, score):
         f.write(str(rec))
 
 
-game_sc = Canvas(tk, width=W*TILE+1, height=H*TILE+1, bg="yellow", highlightthickness=0)
+game_sc = Canvas(tk, width=W*TILE+1, height=H*TILE+1, bg="#1E90FF", highlightthickness=0)
 game_sc.place(x=20, y=20, anchor=NW)
 
 img_obj1 = PhotoImage(file="img/bg.png")
