@@ -191,7 +191,20 @@ while app_running:
             figure_rect_y = figure[i][1] * TILE
             fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x+TILE, figure_rect_y+TILE,fill=rgb_to_hex(color)))
 
+         # draw field
+        for y, raw in enumerate(field):
+            for x, col in enumerate(raw):
+                if col:
+                    figure_rect_x, figure_rect_y = x * TILE, y * TILE
+                    fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE,
+                                                        figure_rect_y + TILE, fill=rgb_to_hex(col)))
 
+        # draw next figure
+        for i in range(4):
+            figure_rect_x = next_figure[i][0] * TILE + 380
+            figure_rect_y = next_figure[i][1] * TILE + 185
+            game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE,
+                                     fill=rgb_to_hex(next_color))
 
         dx, rotate = 0, False
         tk.update_idletasks()
@@ -203,4 +216,4 @@ while app_running:
 tk.destroy()
 #tk.mainloop()
 
-video_time = 6:07/.
+# video_time = 6:07/.
