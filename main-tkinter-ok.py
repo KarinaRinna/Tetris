@@ -203,4 +203,4 @@ while app_running:
 tk.destroy()
 #tk.mainloop()
 
-video_time = 6:07
+video_time = 6:07/.
