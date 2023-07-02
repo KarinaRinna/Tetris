@@ -81,6 +81,7 @@ _score = sc.create_text(550, 840,text=str(score), font=("WiGuru 2", 35),fill="wh
 sc.create_text(525, 650,text="record:", font=("WiGuru 2", 35),fill="white", anchor=NW)
 _record = sc.create_text(550, 710,text=record, font=("WiGuru 2", 35),fill="gold", anchor=NW)
 
+# цвета фигур?
 get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
 
 figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
@@ -186,6 +187,7 @@ while app_running:
                 lines += 1
         # compute score
         score += scores[lines]
+
 
         fig = []
         # draw figure
