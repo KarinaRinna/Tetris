@@ -196,6 +196,7 @@ while app_running:
             figure_rect_y = figure[i][1] * TILE
             fig.append(game_sc.create_rectangle(figure_rect_x, figure_rect_y, figure_rect_x + TILE, figure_rect_y + TILE, fill=rgb_to_hex(color)))
 
+
         # draw field
         for y, raw in enumerate(field):
             for x, col in enumerate(raw):
