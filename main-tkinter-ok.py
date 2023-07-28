@@ -26,6 +26,7 @@ tk.resizable(0, 0)
 tk.wm_attributes("-topmost", 1)
 #tk.iconbitmap("bomb-3175208_640.ico")
 
+
 sc = Canvas(tk, width=RES[0], height=RES[1], bg="red", highlightthickness=0)
 sc.pack()
 
