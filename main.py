@@ -27,7 +27,7 @@ figures = [[pygame.Rect(x + W // 2, y + 1, 1, 1) for x, y in fig_pos] for fig_po
 figure_rect = pygame.Rect(0, 0, TILE - 2, TILE - 2)
 field = [[0 for i in range(W)] for j in range(H)]
 
-anim_count, anim_speed, anim_limit = 0, 60, 2000
+anim_count, anim_speed, anim_limit = 0, 30, 2000
 
 bg = pygame.image.load('img/bg.jpg').convert()
 game_bg = pygame.image.load('img/bg2.jpg').convert()
